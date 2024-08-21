@@ -1,13 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using UnitTestMoqFinal.Models;
 using UnitTestMoqFinal.Services;
+using System;
+
+using System.Net.Http;
+
+using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace UnitTestMoqFinal.Controllers
 {
+
     [Route("api/[controller]")]
     [ApiController]
     public class ProductController : ControllerBase
     {
+        private string url = "https://spotify-demo-api-fe224840a08c.herokuapp.com/v1/browse/featured-playlists";
+
         private readonly IProductService productService;
         public ProductController(IProductService _productService)
         {
@@ -22,9 +31,15 @@ namespace UnitTestMoqFinal.Controllers
 
         }
         [HttpGet("getproductbyid")]
-        public Product GetProductById(int Id)
+        public async Task<Product> GetProductById(int Id)
         {
             return productService.GetProductById(Id);
+        }
+
+        [HttpGet("MusicMatcher")]
+        public async Task<FeaturedPlaylists> MusicMatcher()
+        {
+            return await productService.MusicList();
         }
 
         [HttpPost("addproduct")]
